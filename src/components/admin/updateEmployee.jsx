@@ -12,10 +12,10 @@ export default function UpdateEmployee({ id, username, email }) {
     const toast = useToast();
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
+    const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [file, setFile] = useState(null);
-    const [show, setShow] = useState(false);
     const Formschema = Yup.object().shape(({
         username: Yup.string()
             .required("Write your name"),
@@ -39,13 +39,13 @@ export default function UpdateEmployee({ id, username, email }) {
             data.append("email", { email }.email);
             data.append("password", { password }.password);
             data.append("avatar", file);
-            await Axios.patch(`http://localhost:3369/api/admin/updateCashier/${id}`, data, {
+            await Axios.patch(`http://localhost:3369/api/admin/${id}`, data, {
                 headers: { Authorization: `Bearer ${token}` },
-                "content-Type": "Multiple/form-data"
+                "content-Type": "Multipart/form-data"
             });
             toast({
-                title: "Cashier Updated!",
-                description: "Your Cashier Data Updated!",
+                title: "Employee Updated!",
+                description: "Employee data updated!",
                 status: 'success',
                 duration: 1000,
                 isClosable: true,
@@ -53,15 +53,23 @@ export default function UpdateEmployee({ id, username, email }) {
             });
             setTimeout(() => {
                 window.location.reload();
-                navigate("/cashierlist");
+                navigate("/employeelist");
             }, 1000);
         } catch (err) {
-            console.log(err);
+            toast({
+                title: "Employee Update Failed",
+                description: err.response.data.message,
+                status: 'error',
+                duration: 1000,
+                isClosable: true,
+                position: "top"
+            });
+            console.error(err);
         }
     }
     return (
         <>
-            <Button borderRadius={"70px"} color={"white"} bg={"blue.600"} onClick={onOpen}><EditIcon /> </Button>
+            <Button borderRadius={"70px"} color={"white"} bg={"blue.700"} onClick={onOpen}><EditIcon /> </Button>
             <Modal
                 initialFocusRef={initialRef}
                 finalFocusRef={finalRef}
@@ -69,7 +77,7 @@ export default function UpdateEmployee({ id, username, email }) {
                 onClose={onClose} >
                 <ModalOverlay />
                 <ModalContent borderRadius={"10px"}>
-                    <ModalHeader borderTopRadius={"10px"} bg={"#FFC900"}>Update Cashier Data</ModalHeader>
+                    <ModalHeader borderTopRadius={"10px"} bg={"#414141"} color={'black'}>Update Employee Data</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
                         <Formik
@@ -111,7 +119,7 @@ export default function UpdateEmployee({ id, username, email }) {
                                             {({ field }) => (
                                                 <FormControl mt={4}>
                                                     <FormLabel>Photo</FormLabel>
-                                                    <Input mb={"10px"}  {...field}
+                                                    <Input mb={"25px"}  {...field}
                                                         onChange={(e) => {
                                                             field.onChange(e);
                                                             setFile(e.target.files[0]);
@@ -120,7 +128,7 @@ export default function UpdateEmployee({ id, username, email }) {
                                                 </FormControl>
                                             )}
                                         </Field>
-                                        <Button type='submit' colorScheme='yellow' mr={3}>  Update Cashier  </Button>
+                                        <Button type='submit' colorScheme='green' mr={3}>Update Employee</Button>
                                         <Button onClick={onClose}>Cancel</Button>
                                     </Form>
                                 );

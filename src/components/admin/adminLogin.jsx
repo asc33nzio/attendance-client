@@ -18,9 +18,12 @@ export const AdminLogin = () => {
     const token = localStorage.getItem("token");
     const loginSchema = Yup.object().shape({
         username: Yup.string()
+            .min(6, 'Reminder: AMS username must be at least 6 characters.')
             .required("Username is required"),
         password: Yup.string()
-            .required("Password is required")
+            .min(6, 'Reminder: AMS password must be at least 6 characters.')
+            .matches(/^(?=.*[A-Z])(?=.*\W).+$/, 'Reminder: AMS password must contain a symbol, a number, and an uppercase letter.')
+            .required('Password is required.'),
     });
     const handleSubmit = async (data) => {
         try {

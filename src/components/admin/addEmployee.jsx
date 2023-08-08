@@ -1,54 +1,63 @@
 import Axios from 'axios';
 import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input, FormControl, FormLabel, useToast, Flex, Box, } from '@chakra-ui/react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input, FormControl, FormLabel, useToast } from '@chakra-ui/react';
 
 export default function AddEmployee() {
     const initialRef = useRef(null);
     const finalRef = useRef(null);
-    const toast = useToast();
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
-    const [file, setFile] = useState(null);
     const [success, setSuccess] = useState();
-    const [show, setShow] = useState(false);
+    const [roles, setRoles] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const handleClick = () => setShow(!show);
+    const toast = useToast();
     const Formschema = Yup.object().shape(({
         username: Yup.string()
-            .required("Write your name")
-            .matches(/^(\S+$)/g, 'This field cannot contain blankspaces'),
+            .required("Enter a username.")
+            .matches(/^(\S+$)/g, 'This field cannot contain blankspaces.'),
         email: Yup.string()
-            .email("Invalid email addres format")
-            .required("Write your Email"),
-        password: Yup.string()
-            .required("Password is required")
-            .min(6, "Password minimum 6 characters long")
-            .matches(/^(?=.*[A-Z])/, "Password Must Contain 1 Capital")
-            .matches(/^(?=.*(\W|_))/, "Password Must Contain 1 Symbol")
-            .matches(/.*[0-9].*/, "Password Must Contain 1 number"),
-        avatar: Yup.string()
-            .required("Add image"),
+            .email("Invalid e-mail address format.")
+            .required("Please include an e-mail address.")
     }));
+
+    useEffect(() => {
+        async function fetchRoles() {
+            try {
+                const response = await Axios.get("http://localhost:3369/api/admin/roles");
+                setRoles(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchRoles();
+    }, []);
+
     const handleCreate = async (value) => {
         try {
-            const data = new FormData();
-            const { username, email, password } = value;
-            data.append("username", { username }.username);
-            data.append("email", { email }.email);
-            data.append("password", { password }.password);
-            data.append("avatar", file);
-            await Axios.post("http://localhost:8000/api/admin", data, {
-                headers: { Authorization: `Bearer ${token}` },
-                "content-Type": "Multiple/form-data"
-            });
+            const { username, email, role } = value;
+            const requestData = {
+                username: username,
+                email: email,
+                role: role
+            };
+
+            await Axios.post(
+                "http://localhost:3369/api/admin",
+                requestData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
             setSuccess(true);
             toast({
-                title: "New Cashier!",
-                description: "Your Cashier Data uploaded!",
+                title: "Success!",
+                description: "Preliminary registration successful. Please inform new employee to check their e-mail.",
                 status: 'success',
                 duration: 1500,
                 isClosable: true,
@@ -56,13 +65,13 @@ export default function AddEmployee() {
             });
             setTimeout(() => {
                 window.location.reload();
-                navigate("/cashierlist");
+                navigate("/employeeList");
             }, 1000);
         } catch (err) {
             console.log(err);
             toast({
-                title: "Access Denied!",
-                description: err.response.data.error.message,
+                title: "Failed!",
+                description: err.response.data.message,
                 status: "error",
                 duration: 2500,
                 isClosable: true,
@@ -72,7 +81,7 @@ export default function AddEmployee() {
     }
     return (
         <>
-            <Button boxShadow={"0px 0px 5px grey"} bg={"#D5AD18"} color={"white"} w={{ base: '200px', md: '200px', lg: '200px' }} onClick={onOpen}>Add Cashier</Button>
+            <Button boxShadow={"0px 0px 5px grey"} bg={"#727272"} color={"white"} w={{ base: '200px', md: '200px', lg: '200px' }} onClick={onOpen}>Add New Employee</Button>
             <Modal
                 initialFocusRef={initialRef}
                 finalFocusRef={finalRef}
@@ -80,14 +89,13 @@ export default function AddEmployee() {
                 onClose={onClose} >
                 <ModalOverlay />
                 <ModalContent borderRadius={"10px"}>
-                    <ModalHeader borderTopRadius={"10px"} bg={"#FFC900"}>Create a New Cashier Account</ModalHeader>
+                    <ModalHeader borderTopRadius={"10px"} bg={"#E0E0E0"}>Create a New Employee Account</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
                         <Formik
-                            initialValues={{ username: "", email: "", password: "", avatar: null }}
+                            initialValues={{ username: "", email: "", role: "Employee" }}
                             validationSchema={Formschema}
                             onSubmit={(value, action) => {
-                                console.log(value);
                                 handleCreate(value);
                                 if (success) action.resetForm();
                             }}>
@@ -96,44 +104,23 @@ export default function AddEmployee() {
                                     <Form>
                                         <FormControl>
                                             <FormLabel>Username</FormLabel>
-                                            <Field as={Input} ref={initialRef} variant={"flushed"} placeholder='Ex: JohnDoe' name="username" borderBottom={"1px solid"} borderColor={"#D5AD18"} />
+                                            <Field as={Input} ref={initialRef} variant={"flushed"} placeholder='i.e. : JohnDoe' name="username" borderBottom={"1px solid"} borderColor={"#E0E0E0"} />
                                             <ErrorMessage component="Box" name="username" style={{ color: "red", marginBottom: "-20px", marginLeft: "3px", marginTop: "-9px" }} />
                                         </FormControl>
                                         <FormControl mt={4}>
                                             <FormLabel>Email</FormLabel>
-                                            <Field as={Input} variant={"flushed"} placeholder='Ex: Johndoe@gmail.com' name='email' borderBottom={"1px solid"} borderColor={"#D5AD18"} />
+                                            <Field as={Input} variant={"flushed"} placeholder='i.e. : johndoe@examplemail.com' name='email' borderBottom={"1px solid"} borderColor={"#E0E0E0"} />
                                             <ErrorMessage component="Box" name="email" style={{ color: "red", marginBottom: "-20px", marginLeft: "3px", marginTop: "-9px" }} />
                                         </FormControl>
-                                        <FormControl mt={4}>
-                                            <FormLabel>Password</FormLabel>
-                                            <Flex>
-                                                <Box>
-                                                    <Field as={Input} name="password" w={{ base: '180px', md: '400px', lg: '400px' }} placeholder="Ex: /Johndoe12" size={"md"} type={show ? 'text' : 'password'} variant={"flushed"} color={"black"} borderBottom={"1px solid"} borderColor={"#D5AD18"} />
-                                                    <ErrorMessage
-                                                        component="box"
-                                                        name="password"
-                                                        style={{ color: "red", marginBottom: "-18px", marginTop: "-8px" }} />
-                                                </Box>
-
-                                                <Button right={"30px"} variant={"unstyled"} size='sm' onClick={handleClick}>
-                                                    {show ? <ViewIcon /> : <ViewOffIcon />}
-                                                </Button>
-                                            </Flex>
+                                        <FormControl mt={4} mb={"50px"}>
+                                            <FormLabel>Role</FormLabel>
+                                            <Field as="select" variant={"flushed"} name="role" borderBottom={"1px solid"} borderColor={"#E0E0E0"}>
+                                                {roles.map(role => (
+                                                    <option key={role.id} value={role.name}>{role.name}</option>
+                                                ))}
+                                            </Field>
                                         </FormControl>
-                                        <Field name="avatar">
-                                            {({ field }) => (
-                                                <FormControl mt={4}>
-                                                    <FormLabel>Photo</FormLabel>
-                                                    <Input mb={"10px"}  {...field}
-                                                        onChange={(e) => {
-                                                            field.onChange(e);
-                                                            setFile(e.target.files[0]);
-                                                        }} variant={"flushed"} borderBottom={"1px solid"} borderColor={"#D5AD18"} placeholder='Photo' name='avatar' as={Field} type='file' />
-                                                    <ErrorMessage component="Box" name="avatar" style={{ color: "red", marginBottom: "-20px", marginLeft: "3px", marginTop: "-9px" }} />
-                                                </FormControl>
-                                            )}
-                                        </Field>
-                                        <Button type='submit' colorScheme='yellow' mr={3}>  Add Cashier  </Button>
+                                        <Button type='submit' colorScheme='green' mr={3}>Add Employee</Button>
                                         <Button onClick={onClose}>Cancel</Button>
                                     </Form>
                                 );

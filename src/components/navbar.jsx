@@ -67,10 +67,10 @@ export const Navbar = () => {
                     </Box>
                 </Box>
                 <Stack w={"100vw"} _focus={{ borderColor: '#D5AD18', boxShadow: 'none', transform: 'scale(1.01)' }} marginRight="250px">
-                    <Text color={'white'} textAlign={'left'}>
+                    <Text color={'white'} textAlign={'left'} fontFamily={'monospace'}>
                         Greetings {data.firstName} {data.lastName}. Please don't forget to check in today.
                     </Text>
-                    <Text color={'white'} textAlign={'left'} mt={'-10px'}>
+                    <Text color={'white'} textAlign={'left'} mt={'-10px'} fontFamily={'monospace'}>
                         Have a nice day!
                     </Text>
                 </Stack>
@@ -95,12 +95,13 @@ export const Navbar = () => {
                                         <Text fontSize={"12px"}>{data.email}</Text>
                                     </Box>
                                 </MenuItem>
-                                <MenuItem as={Link} to="/cashier">Home</MenuItem>
+                                <MenuItem as={Link} to="/">Home</MenuItem>
                                 <MenuItem as={Link} to="/profile">Profile</MenuItem>
+                                <MenuItem as={Link} to="/attendance">Attendance History</MenuItem>
+                                <MenuItem as={Link} to="/payroll">Payroll Report</MenuItem>
                                 {data.isAdmin ? (
                                     <Box>
-                                        <MenuItem as={Link} to="/cashierlist">Cashier List</MenuItem>
-                                        <MenuItem as={Link} to="/sales">Sales Report</MenuItem>
+                                        <MenuItem as={Link} to="/employeelist">Employee List</MenuItem>
                                     </Box>
                                 ) : (null)}
                                 <MenuItem fontWeight={"bold"} color={"red"} onClick={onLogout}>Log Out</MenuItem>

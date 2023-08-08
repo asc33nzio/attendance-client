@@ -17,16 +17,19 @@ export const EmployeeLogin = () => {
     const [show, setShow] = useState(false);
     const loginSchema = Yup.object().shape({
         username: Yup.string()
+            .min(6, 'Reminder: AMS username must be at least 6 characters.')
             .required("Username is required"),
         password: Yup.string()
-            .required("Password is required")
+            .min(6, 'Reminder: AMS password must be at least 6 characters.')
+            .matches(/^(?=.*[A-Z])(?=.*\W).+$/, 'Reminder: AMS password must contain a symbol, a number, and an uppercase letter.')
+            .required('Password is required.'),
     });
     const handleSubmit = async (data) => {
         try {
             const response = await Axios.post("http://localhost:3369/api/users/employee", data);
             dispatch(setValue(response.data.user));
             localStorage.setItem("token", response.data.token);
-                navigate("/cashier");
+            navigate("/employee");
             toast({
                 title: "Welcome!",
                 description: "Login Success!",

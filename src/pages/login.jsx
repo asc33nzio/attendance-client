@@ -8,14 +8,14 @@ export const Login = () => {
     return (
         <>
             <Flex w={"full"} h={"100vh"} bgGradient="linear(#000000, #FFFFFF)" justifyContent={"center"}>
-                <Box margin={"auto"} bg={"white"} w={{ base: '250px', md: '500px', lg: '600px', xl: "600px" }} h={"500px"} border={"2px solid"} borderColor={"black"} borderRadius={"10px"} boxShadow={"0px 0px 10px black"} justifyContent={"center"}>
+                <Box margin={"auto"} bg={"white"} w={{ base: '300px', md: '550px', lg: '650px', xl: "650px" }} h={"550px"} border={"2px solid"} borderColor={"black"} borderRadius={"10px"} boxShadow={"0px 0px 10px black"} justifyContent={"center"}>
                     <Flex justifyContent={"center"}>
                         <Heading mt={{ base: '58px', md: '55px', lg: '45px' }} color={"#414141"} fontSize={{ base: '30px', md: '40px', lg: '60px', xl: "60px" }} fontFamily={"Cascadia Mono"}>◈Ⓛ◈Ⓞ◈Ⓖ◈Ⓘ◈Ⓝ◈</Heading>
                     </Flex>
                     <Flex mt={"25px"} fontSize={{ base: '10px', md: '12px', lg: '12px', xl: "12px" }} justifyContent={"center"} fontFamily={"Monospace"}>
                         <Text display={"flex"}>  Forget your Password?
-                            <Link to="/forgot">
-                                <Text _hover={{ color: "#FFC900" }} color={"#B0B0B0"}>‎ Click here.</Text>
+                            <Link to="/forgetpassword">
+                                <Text _hover={{ color: "red" }} color={"#B0B0B0"}>‎ Click here.</Text>
                             </Link>
                         </Text>
                     </Flex>

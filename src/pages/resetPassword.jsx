@@ -10,14 +10,14 @@ export const ResetPassword = () => {
     const { token } = useParams();
     const Resetschema = Yup.object().shape(({
         newPassword: Yup.string()
-            .required("Password is required")
-            .min(6, "Password minimum 6 characters long")
-            .matches(/^(?=.*[A-Z])/, "Password Must Contain 1 Capital")
-            .matches(/^(?=.*(\W|_))/, "Password Must Contain 1 Symbol")
-            .matches(/.*[0-9].*/, "Password Must Contain 1 number"),
+            .required("Password is required.")
+            .min(6, "Password must be at least 6 characters long.")
+            .matches(/^(?=.*[A-Z])/, "Password must contain at least 1 capital letter.")
+            .matches(/^(?=.*(\W|_))/, "Password must contain at least 1 symbol.")
+            .matches(/.*[0-9].*/, "Password must contain at least 1 number."),
         confirmPassword: Yup.string()
-            .oneOf([Yup.ref("newPassword")], "Password is not same")
-            .required("have to same"),
+            .oneOf([Yup.ref("newPassword")], "Password does not match.")
+            .required("Please enter password confirmation."),
     }));
     const handleReset = async (values) => {
         try {
@@ -33,7 +33,7 @@ export const ResetPassword = () => {
             );
             toast({
                 title: "Password Updated!",
-                description: "You can Login with your new Password!",
+                description: "You can login with your new password!",
                 status: 'success',
                 duration: 2500,
                 isClosable: true,
@@ -44,7 +44,7 @@ export const ResetPassword = () => {
             console.error(error);
             toast({
                 title: "Failed to Reset",
-                description: "Password Reset Unsuccessful. Please try again.",
+                description: "Password reset unsuccessful. Please try again.",
                 status: 'error',
                 duration: 2500,
                 isClosable: true,
@@ -59,7 +59,7 @@ export const ResetPassword = () => {
                 <Flex margin={"auto"} borderRadius={"10px"} justifyContent={"center"}
                     boxShadow='0px 0px 6px black' bg={"white"} w={"700px"} h={"450px"}>
                     <Box justifyContent={"center"}>
-                        <Heading mt={{ base: '68px', md: '55px', lg: '80px' }} color={"#D5AD18"} fontSize={{ base: '30px', md: '40px', lg: '60px', xl: "60px" }} fontFamily={"Times New Roman"}>Reset Password!</Heading>
+                        <Heading mt={{ base: '68px', md: '55px', lg: '80px' }} color={"#D5AD18"} fontSize={{ base: '30px', md: '40px', lg: '60px', xl: "60px" }} fontFamily={"Monospace"}>Reset Password!</Heading>
                         <Formik
                             initialValues={{ newPassword: "", confirmPassword: "" }}
                             validationSchema={Resetschema}
@@ -85,7 +85,7 @@ export const ResetPassword = () => {
                                             </VStack>
                                         </Flex>
                                         <Flex mt={"30px"} justifyContent={"center"}>
-                                            <Button isDisabled={!props.dirty} type="submit" fontFamily={"Times New Roman"} boxShadow='0px 0px 6px black' color={"black"} bgGradient="linear(#FFEA61, #FFC900)" w={"200px"}>
+                                            <Button isDisabled={!props.dirty} type="submit" fontFamily={"Monospace"} boxShadow='0px 0px 6px black' color={"black"} bgGradient="linear(#FFEA61, #FFC900)" w={"200px"}>
                                                 Login
                                             </Button>
                                         </Flex>
