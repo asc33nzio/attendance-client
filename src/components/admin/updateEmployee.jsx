@@ -141,4 +141,4 @@ export default function UpdateEmployee({ id, username, email }) {
             </Modal >
         </>
     )
-}
+};

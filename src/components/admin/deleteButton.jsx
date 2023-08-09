@@ -27,14 +27,15 @@ export const DeleteButton = ({ id }) => {
         } catch (err) {
             console.log(err);
         }
-    }
+    };
+
     return (
         <Box>
             <Button borderRadius={"70px"} onClick={onOpen} ml={"5px"} color={"white"} bg={"red"}><DeleteIcon /></Button>
             <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader borderTopRadius={"5px"} bg={"#FFC900"}>Delete Employee</ModalHeader>
+                    <ModalHeader borderTopRadius={"5px"} bg={"#414141"} color={'black'}>Delete Employee</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
                         Are you sure want to delete this employee?
@@ -48,4 +49,4 @@ export const DeleteButton = ({ id }) => {
         </Box>
 
     )
-}
+};

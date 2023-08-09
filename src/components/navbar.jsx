@@ -75,7 +75,7 @@ export const Navbar = () => {
                     </Text>
                 </Stack>
                 <Flex justifyContent={"end"} align={"center"} w={"20%"}>
-                    <Flex cursor={"pointer"} onClick={() => navigate("/search")} _active={{ transition: "0.1s", transform: "scale(0.95)" }} alignItems={"center"} p={"10px"} borderRadius={"5px"} color={"white"} h={{ base: '30px', sm: '40px', md: '40px' }}>
+                    <Flex cursor={"pointer"} onClick={() => navigate("/history")} _active={{ transition: "0.1s", transform: "scale(0.95)" }} alignItems={"center"} p={"10px"} borderRadius={"5px"} color={"white"} h={{ base: '30px', sm: '40px', md: '40px' }}>
                         <SearchIcon boxSize={{ base: "25px" }} />
                     </Flex>
                     <Avatar as={Link} to={"/profile"} left={"20px"} boxShadow={"0px 0px 10px grey"} src={`http://localhost:3369/avatars/${data.avatar}`} bgColor={"gray.400"} colorScheme={"#FFC900"} />
@@ -97,7 +97,7 @@ export const Navbar = () => {
                                 </MenuItem>
                                 <MenuItem as={Link} to="/">Home</MenuItem>
                                 <MenuItem as={Link} to="/profile">Profile</MenuItem>
-                                <MenuItem as={Link} to="/attendance">Attendance History</MenuItem>
+                                <MenuItem as={Link} to="/history">Attendance History</MenuItem>
                                 <MenuItem as={Link} to="/payroll">Payroll Report</MenuItem>
                                 {data.isAdmin ? (
                                     <Box>
@@ -112,4 +112,4 @@ export const Navbar = () => {
             </Flex>
         </Box>
     )
-}
+};

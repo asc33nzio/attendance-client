@@ -7,6 +7,7 @@ import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, } from '@chakra-ui/rea
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { DeleteButton } from "../components/admin/deleteButton";
+import { useSelector } from "react-redux";
 
 export const EmployeeList = () => {
     const token = localStorage.getItem("token");
@@ -14,6 +15,20 @@ export const EmployeeList = () => {
     const navigate = useNavigate();
     const [data, setData] = useState();
     const [reload, setReload] = useState(true);
+    const userData = useSelector(state => state.user.value);
+
+    if (userData.isAdmin === false) {
+        toast({
+            title: "Forbidden!",
+            description: "You are not an administrator.",
+            status: "error",
+            duration: 3500,
+            isClosable: true,
+            position: "top"
+        });
+        navigate("/")
+    };
+
     const getEmployees = async (data) => {
         try {
             const response = await Axios.get("http://localhost:3369/api/admin/all", data);

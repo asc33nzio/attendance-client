@@ -75,4 +75,4 @@ export const Forgot = () => {
             </Flex>
         </>
     );
-}
+};

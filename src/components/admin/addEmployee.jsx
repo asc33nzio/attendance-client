@@ -17,9 +17,11 @@ export default function AddEmployee() {
     const Formschema = Yup.object().shape(({
         username: Yup.string()
             .required("Enter a username.")
+            .min(6, 'AMS username must be at least 6 characters.')
             .matches(/^(\S+$)/g, 'This field cannot contain blankspaces.'),
         email: Yup.string()
             .email("Invalid e-mail address format.")
+            .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Valid e-mail address format is required.")
             .required("Please include an e-mail address.")
     }));
 
@@ -133,4 +135,4 @@ export default function AddEmployee() {
             </Modal >
         </>
     )
-}
+};
