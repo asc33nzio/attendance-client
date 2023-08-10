@@ -1,13 +1,14 @@
 import Axios from "axios";
 import AddEmployee from "../components/admin/addEmployee";
 import UpdateEmployee from "../components/admin/updateEmployee";
-import { Avatar, Box, Button, Flex, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, HStack, Text, useToast } from "@chakra-ui/react";
 import { Navbar } from "../components/navbar";
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, } from '@chakra-ui/react';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { DeleteButton } from "../components/admin/deleteButton";
 import { useSelector } from "react-redux";
+import { EditSalary } from "../components/admin/editSalary";
 
 export const EmployeeList = () => {
     const token = localStorage.getItem("token");
@@ -37,6 +38,7 @@ export const EmployeeList = () => {
             console.log(error);
         };
     };
+
     const handleSuspend = async (id) => {
         try {
             await Axios.patch(`http://localhost:3369/api/admin/suspend/${id}`, {}, {
@@ -70,9 +72,10 @@ export const EmployeeList = () => {
             <Flex mt={"195px"} justifyContent={"center"}>
                 <Text mt={"10px"} borderBottom={"2px solid"} fontFamily={"Monospace"} fontSize={"35px"}>SCP AMS Employee Data</Text>
             </Flex>
-            <Flex mt={"20px"} justifyContent={"center"}>
+            <HStack mt={"20px"} spacing={'25px'} justifyContent={"center"}>
                 <AddEmployee />
-            </Flex>
+                <EditSalary />
+            </HStack>
             <Flex mt={"40px"} justifyContent={"center"}>
                 <Box>
                     <TableContainer w={{ base: '250px', md: '800px', lg: '900px', xl: "1200px" }}>
